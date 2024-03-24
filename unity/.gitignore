@@ -1,0 +1,14 @@
+# tmp to remove all except source
+Assets/Scenes/
+.DS_Store
+
+Library
+Logs
+obj/Debug
+Packages
+ProjectSettings
+Temp
+UserSettings
+*.csproj
+*.meta
+My project.sln
