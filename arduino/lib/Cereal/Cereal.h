@@ -26,7 +26,7 @@ public:
     datagram[1] = (uint8_t)'B';
     datagram[2] = channel;
     datagram[3] = type;
-    memcpy(&datagram[4], &value, sizeof(value));
+    memcpy(&datagram[4], &value, 4);
     datagram[8] = (uint8_t)'E';
     datagram[9] = (uint8_t)'E';
     return datagram;
