@@ -29,6 +29,6 @@ void loop() {
   cereal.sendFloat(1, x);
   cereal.sendFloat(2, y);
   cereal.sendFloat(3, z);
-
+  Serial.println("Just hanging around");
   delay(5);
 }
