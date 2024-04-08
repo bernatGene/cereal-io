@@ -91,6 +91,43 @@ public class Cereal
         }
     }
 
+    private void setData(byte channel, byte datatype, byte[] datagram, byte[] data)
+    {
+        datagram[0] = (byte)'B';
+        datagram[1] = (byte)'B';
+        datagram[2] = channel;
+        datagram[3] = datatype;
+        Array.Copy(data, 0, datagram, 4, 4);
+        datagram[8] = (byte)'E';
+        datagram[9] = (byte)'E';
+    }
+
+    private byte[] ToDatagram(byte channel, byte datatype, float value)
+    {
+        byte[] datagram = new byte[10];
+        byte[] data = BitConverter.GetBytes(value);
+        setData(channel, datatype, datagram, data);
+        return datagram;
+    }
+    private byte[] ToDatagram(byte channel, byte datatype, int value)
+    {
+        byte[] datagram = new byte[10];
+        byte[] data = BitConverter.GetBytes(value);
+        setData(channel, datatype, datagram, data);
+        return datagram;
+    }
+
+    public void SendInt(byte channel, int value)
+    {
+        byte[] datagram = ToDatagram(channel, (byte)'I', value);
+        _serial.Write(datagram, 0, 10);
+    }
+    public void SendFloat(byte channel, float value)
+    {
+        byte[] datagram = ToDatagram(channel, (byte)'F', value);
+        _serial.Write(datagram, 0, 10);
+    }
+
     public void InitCereal(string port, int baudRate = 256)
     {
         try

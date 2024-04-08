@@ -16,7 +16,20 @@ void Cereal::begin()
   {
     Serial.begin(_baudRate);
   }
+  else 
+  {
+    Serial.println("Serial already started, baud rate might not match");
+  }
 }
+
+void Cereal::readCereal()
+{
+  if (!Serial or Serial.available() == 0)
+  {
+    return;
+  }
+}
+
 
 void Cereal::sendInt(int channel, int value)
 {
