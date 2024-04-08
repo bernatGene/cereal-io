@@ -9,8 +9,8 @@ public class Cereal
 {
     private SerialPort _serial;
     private static List<byte> _broken = new List<byte>();
-    private float[] floatChannels = new float[128];
-    private int[] intChannels = new int[128];
+    private float[] _floatChannels = new float[128];
+    private int[] _intChannels = new int[128];
 
     private void SetChannelValue(byte datatype, uint channel, byte[] data)
     {
@@ -21,12 +21,12 @@ public class Cereal
         if (datatype == (byte)'I')
         {
             int value = BitConverter.ToInt32(data, 0);
-            intChannels[channel] = value;
+            _intChannels[channel] = value;
         }
         else if (datatype == (byte)'F')
         {
             float value = BitConverter.ToSingle(data, 0);
-            floatChannels[channel] = value;
+            _floatChannels[channel] = value;
         }
     }
     private void HandleBuffer(byte[] newBuffer)
@@ -128,11 +128,11 @@ public class Cereal
 
     public float ReadFloat(uint channel)
     {
-        return floatChannels[channel];
+        return _floatChannels[channel];
     }
     public int ReadInt(uint channel)
     {
-        return intChannels[channel];
+        return _intChannels[channel];
     }
 
 }
