@@ -12,7 +12,7 @@ public class Cereal
     private float[] floatChannels = new float[128];
     private int[] intChannels = new int[128];
 
-    private void SetChannelValue(byte datatype, uint channel, ref byte[] data)
+    private void SetChannelValue(byte datatype, uint channel, byte[] data)
     {
         if (channel > 128)
         {
@@ -22,7 +22,6 @@ public class Cereal
         {
             int value = BitConverter.ToInt32(data, 0);
             intChannels[channel] = value;
-            // Debug.Log(value);
         }
         else if (datatype == (byte)'F')
         {
@@ -66,7 +65,7 @@ public class Cereal
             byte[] data = new byte[4];
             Array.Copy(buffer, i + 4, data, 0, 4);
             i += 9;
-            SetChannelValue(datatype, channel, ref data);
+            SetChannelValue(datatype, channel, data);
         }
     }
 
