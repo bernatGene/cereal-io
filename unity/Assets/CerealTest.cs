@@ -23,7 +23,7 @@ public class CerealTest : MonoBehaviour
     {
         RefreshPortsDropdown();
         cereal = new Cereal();
-        lastWrite =  Time.time;
+        lastWrite = Time.time;
     }
 
     void Update()
@@ -36,7 +36,7 @@ public class CerealTest : MonoBehaviour
             float z = cereal.ReadFloat(3);
             Debug.Log($"Read count({count}) x: {x}, y: {y}, z: {z}");
         }
-        if (WriteSerial && lastWrite + 0.5 < Time.time) 
+        if (WriteSerial && lastWrite + 0.5 < Time.time)
         {
             lastWrite = Time.time;
             lastValueSent += 1;
@@ -66,7 +66,4 @@ public class CerealTest : MonoBehaviour
     {
         cereal.Disconnect();
     }
-
-
-
 }
