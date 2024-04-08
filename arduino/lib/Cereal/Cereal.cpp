@@ -29,7 +29,7 @@ void Cereal::sendInt(int channel, int value)
 
 void Cereal::sendFloat(int channel, float value)
 {
-  std::array<uint8_t, 10> datagram = toDatagram(channel, 'I', value);
+  std::array<uint8_t, 10> datagram = toDatagram(channel, 'F', value);
   for (int i = 0; i < 10; i++)
   {
     Serial.write(datagram[i]);
