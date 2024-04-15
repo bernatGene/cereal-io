@@ -11,6 +11,7 @@ public class CerealTest : MonoBehaviour
     public Dropdown PortsDropdown;
 
     public bool ReadSerial = false;
+    public bool ReDebug = false;
     public bool WriteSerial = false;
 
     private List<string> _ports;
@@ -36,12 +37,18 @@ public class CerealTest : MonoBehaviour
             float z = cereal.ReadFloat(3);
             Debug.Log($"Read count({count}) x: {x}, y: {y}, z: {z}");
         }
-        if (WriteSerial && lastWrite + 1.5 < Time.time)
+        if (ReDebug)
+        {
+            int debug = cereal.ReadInt(99);
+            Debug.Log($"Redebug {debug}");
+        }
+        if (WriteSerial && lastWrite + 1.0 < Time.time)
         {
             lastWrite = Time.time;
             lastValueSent += 1;
             lastValueSent %= 5;
             cereal.SendInt(1, lastValueSent);
+            Debug.Log($"Sending int value {lastValueSent}");
         }
     }
 

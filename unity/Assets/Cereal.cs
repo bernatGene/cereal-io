@@ -123,6 +123,7 @@ public class Cereal
     public void SendInt(byte channel, int value)
     {
         byte[] datagram = ToDatagram(channel, (byte)'I', value);
+        Debug.Log($"Sending datagram {datagram[0]}, {datagram[1]}, {datagram[2]}, {datagram[3]}");
         _serial.Write(datagram, 0, 10);
     }
     public void SendFloat(byte channel, float value)
