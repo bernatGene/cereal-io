@@ -87,6 +87,9 @@ public class Cereal
                     HandleBuffer(buff);
                     yield return null;
                 }
+            } 
+            else {
+                yield return null;
             }
         }
     }
