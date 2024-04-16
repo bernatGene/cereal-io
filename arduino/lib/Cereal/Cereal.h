@@ -30,6 +30,7 @@ public:
   void begin();
   void sendInt(int channel, int32_t value);
   int readInt(int channel);
+  float readFloat(int channel);
   void sendFloat(int channel, float value);
   void readCereal();
   void passiveListen(int miliseconds);
@@ -61,12 +62,10 @@ public:
 
 private:
   int _baudRate;
-  int _intChannels[128];
+  int32_t _intChannels[128];
   float _floatChannels[128];
-  char* _broken;
-  int _brokenBits;
-  void _handleBuffer(uint8_t *newBuffer, int numBytes);
-  void _setChannelValue(char datatype, uint8_t channel, uint8_t *data);
+  char buffer[8];
+  size_t buffer_i = 0;
 };
 
 #endif

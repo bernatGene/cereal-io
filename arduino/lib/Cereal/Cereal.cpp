@@ -1,6 +1,3 @@
-/*
- */
-
 #include "Arduino.h"
 #include "Cereal.h"
 
@@ -27,76 +24,53 @@ void Cereal::readCereal()
   {
     return;
   }
-  int bytesToRead = Serial.available();
-  if (bytesToRead == 0)
+  while (Serial.available() > 0)
   {
-    Serial.read();
-    return;
-  }
-  uint8_t buff[bytesToRead];
-  int read = Serial.readBytes(buff, bytesToRead);
-  if (read > 0)
-  {
-    _handleBuffer(buff, bytesToRead);
-  }
-}
+    char inByte;
+    inByte = Serial.read();
 
-void Cereal::_handleBuffer(uint8_t *newBuffer, int numBytes)
-{
-  int totalBytes = numBytes + _brokenBits;
-  char *buffer;
-  buffer = (char *)malloc(totalBytes);
-  // uint8_t buffer[totalBytes];
-  // for (uint i = 0; i < _brokenBits; i++)
-  // {
-  //   buffer[i] = _broken[i];
-  // }
-  // memcpy(&buffer + _broken.size(), &newBuffer, numBytes);
-  // for (int i = 0; i < totalBytes; i++)
-  // {
-  //   if (totalBytes - i < 10) // not enough left to contain a datagram
-  //   {
-  //     _broken.clear();
-  //     for (int j = 0; (i + j) < totalBytes; j++)
-  //     {
-  //       _broken.push_back(buffer[i + j]);
-  //     }
-  //     return;
-  //   }
-  //   if (buffer[i] != (uint8_t)'B')
-  //   { // not the start of a datagram
-  //     continue;
-  //   }
-  //   bool B2 = buffer[i + 1] == (uint8_t)'B';
-  //   bool E1 = buffer[i + 8] == (uint8_t)'E';
-  //   bool E2 = buffer[i + 9] == (uint8_t)'E';
-  //   if (!(B2 && E1 && E2)) // datagram is malformed; continue
-  //   {
-  //     continue;
-  //   }
-  //   char datatype = buffer[i + 3];
-  //   uint8_t channel = buffer[i + 2];
-  //   i += 9;
-  //   _setChannelValue(datatype, channel, &buffer[i + 4]);
-  // }
-  free(buffer);
-}
-
-void Cereal::_setChannelValue(char datatype, uint8_t channel, uint8_t *data)
-{
-  if (channel > 128)
-  {
-    return; // bad channel
-  }
-  if (datatype == 'I')
-  {
-    union
+    if (inByte != 'B' && buffer_i == 0) // wait for the start of a packet
     {
-      int value;
-      const uint8_t *p;
-    };
-    p = data;
-    _intChannels[channel] = value;
+      continue;
+    }
+    if (buffer_i < 8) // store the packet into buffer
+    {
+      buffer[buffer_i++] = inByte;
+    }
+    else // buffer is full, let's read
+    {
+      bool start = (buffer[0] == 'B');
+      bool end = (buffer[7] == '\n');
+      if (!(start && end)) // ensure packet is well formed
+      {
+        buffer_i = 0;
+        return;
+      }
+      uint8_t channel = buffer[1];
+      char datatype = buffer[2];
+      union // union to cast types. Assumes little-endian
+      {
+        int32_t ii;
+        float ff;
+        char data[4];
+      } value;
+      for (int i = 0; i < 4; i++)
+      {
+        value.data[i] = buffer[i + 3];
+      }
+      if (channel < 128) // ensure channel is valid
+      {
+        if (datatype == 'I')
+        {
+          _intChannels[channel] = value.ii;
+        }
+        else if (datatype == 'F')
+        {
+          _floatChannels[channel] = value.ff;
+        }
+      }
+      buffer_i = 0; // reset the buffer.
+    }
   }
 }
 
@@ -118,7 +92,6 @@ void Cereal::passiveListen(int miliseconds)
   while (millis() < (start + miliseconds))
   {
     readCereal();
-    delay(5);
   }
 }
 
@@ -126,3 +99,9 @@ int Cereal::readInt(int channel)
 {
   return _intChannels[channel];
 }
+
+float Cereal::readFloat(int channel)
+{
+  return _floatChannels[channel];
+}
+

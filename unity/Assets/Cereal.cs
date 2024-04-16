@@ -87,8 +87,9 @@ public class Cereal
                     HandleBuffer(buff);
                     yield return null;
                 }
-            } 
-            else {
+            }
+            else
+            {
                 yield return null;
             }
         }
@@ -97,42 +98,48 @@ public class Cereal
     private void setData(byte channel, byte datatype, byte[] datagram, byte[] data)
     {
         datagram[0] = (byte)'B';
-        datagram[1] = (byte)'B';
-        datagram[2] = channel;
-        datagram[3] = datatype;
-        Array.Copy(data, 0, datagram, 4, 4);
-        datagram[8] = (byte)'E';
-        datagram[9] = (byte)'E';
+        datagram[1] = channel;
+        datagram[2] = datatype;
+        Array.Copy(data, 0, datagram, 3, 4);
+        datagram[7] = (byte)'\n';
     }
 
     private byte[] ToDatagram(byte channel, byte datatype, float value)
     {
-        byte[] datagram = new byte[10];
+        byte[] datagram = new byte[8];
         byte[] data = BitConverter.GetBytes(value);
         setData(channel, datatype, datagram, data);
         return datagram;
     }
     private byte[] ToDatagram(byte channel, byte datatype, int value)
     {
-        byte[] datagram = new byte[10];
+        byte[] datagram = new byte[8];
         byte[] data = BitConverter.GetBytes(value);
         setData(channel, datatype, datagram, data);
         return datagram;
+    }
+    private static string FormatBytes(Byte[] bytes)
+    {
+        string value = "";
+        foreach (var byt in bytes)
+            value += string.Format("{0:X2} ", byt);
+
+        return value;
     }
 
     public void SendInt(byte channel, int value)
     {
         byte[] datagram = ToDatagram(channel, (byte)'I', value);
-        Debug.Log($"Sending datagram {datagram[0]}, {datagram[1]}, {datagram[2]}, {datagram[3]}");
-        _serial.Write(datagram, 0, 10);
+        Debug.Log(FormatBytes(datagram));
+        _serial.Write(datagram, 0, 8);
     }
     public void SendFloat(byte channel, float value)
     {
         byte[] datagram = ToDatagram(channel, (byte)'F', value);
-        _serial.Write(datagram, 0, 10);
+        _serial.Write(datagram, 0, 8);
     }
 
-    public void InitCereal(string port, int baudRate = 256)
+    public void InitCereal(string port, int baudRate = 9600)
     {
         try
         {

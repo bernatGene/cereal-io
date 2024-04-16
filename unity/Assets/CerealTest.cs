@@ -11,14 +11,15 @@ public class CerealTest : MonoBehaviour
     public Dropdown PortsDropdown;
 
     public bool ReadSerial = false;
-    public bool ReDebug = false;
     public bool WriteSerial = false;
+    public bool WriteSerialFloat = false;
 
     private List<string> _ports;
     public Text ConnectionText;
     private Cereal cereal;
     private float lastWrite;
-    private int lastValueSent = 0;
+    public int lastValueSent = 0;
+    public float lastValueSentFloat = 0.0f;
 
     void Start()
     {
@@ -37,18 +38,17 @@ public class CerealTest : MonoBehaviour
             float z = cereal.ReadFloat(3);
             Debug.Log($"Read count({count}) x: {x}, y: {y}, z: {z}");
         }
-        if (ReDebug)
-        {
-            int debug = cereal.ReadInt(99);
-            Debug.Log($"Redebug {debug}");
-        }
-        if (WriteSerial && lastWrite + 1.0 < Time.time)
+        if (WriteSerial && lastWrite + 0.1 < Time.time)
         {
             lastWrite = Time.time;
-            lastValueSent += 1;
-            lastValueSent %= 5;
             cereal.SendInt(1, lastValueSent);
             Debug.Log($"Sending int value {lastValueSent}");
+        }
+        else if (WriteSerialFloat && lastWrite + 0.1 < Time.time)
+        {
+            lastWrite = Time.time;
+            cereal.SendFloat(2, lastValueSentFloat);
+            Debug.Log($"Sending int value {lastValueSentFloat}");
         }
     }
 
