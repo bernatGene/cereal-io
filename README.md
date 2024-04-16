@@ -35,6 +35,7 @@ void loop()
   cereal.sendFloat(0, x); // float an int channels don't overlap
   cereal.sendFloat(1, y);
   cereal.sendFloat(2, z);
+  cereal.passiveListen(100); // Use this instead of `delay()` to avoid blocking the.
 }
 ```
 
@@ -71,6 +72,9 @@ cereal.SendFloat(1, 23.2f); // floats not doubles
 int value = cereal.readInt(1); // 42
 float othervalue = cereal.readFloat(1); // 23.2
 ```
+
+
+## Setting things up
 
 
 Setting the arduino environment should be as easy as copying the `Cereal` library into the libs directory
