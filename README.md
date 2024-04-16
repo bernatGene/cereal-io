@@ -63,13 +63,13 @@ It also works in the opposite direction
 ```c#
 //unity
 cereal.SendInt(1, 42); // send and read channels also don't overlap
-cereal.SendFloat(1, 23.0f); // floats not doubles
+cereal.SendFloat(1, 23.2f); // floats not doubles
 ```
 
 ```c++
 //arduino
-int value = cereal.readInt(1); // send and read channels also don't overlap
-float othervalue = cereal.readFloat(1); // floats not doubles
+int value = cereal.readInt(1); // 42
+float othervalue = cereal.readFloat(1); // 23.2
 ```
 
 
