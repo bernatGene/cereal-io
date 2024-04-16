@@ -65,7 +65,7 @@ public class CerealTest : MonoBehaviour
     public void ConnectToPort()
     {
         string port = _ports[PortsDropdown.value];
-        cereal.InitCereal(port, 512);
+        cereal.InitCereal(port, 9600);
         StartCoroutine(cereal.ReadCereal());
     }
 

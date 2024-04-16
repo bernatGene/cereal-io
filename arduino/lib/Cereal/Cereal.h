@@ -1,38 +1,61 @@
 /*
-  Morse.h - Library for flashing Morse code.
-  Created by David A. Mellis, November 2, 2007.
+  Cereal.h - Library for "shared-memory-like" serial comm.
+  Created by Bernat Gené Skrabec, April, 2024.
   Released into the public domain.
 */
 #ifndef Cereal_h
 #define Cereal_h
 
 #include "Arduino.h"
-#include <array>
-#include <vector>
 
+struct dataGram
+{
+  char start1;
+  char start2;
+  uint8_t CH;
+  char DT;
+  union
+  {
+    int32_t dataInt;
+    float dataFloat;
+  } data;
+  char end1;
+  char end2;
+};
 
 class Cereal
 {
 public:
   Cereal(int baudRate);
   void begin();
-  void sendInt(int channel, int value);
+  void sendInt(int channel, int32_t value);
   int readInt(int channel);
   void sendFloat(int channel, float value);
   void readCereal();
-  bool somethingCame = false;
+  void passiveListen(int miliseconds);
   int osc = 0;
-  template <typename T>
-  std::array<uint8_t, 10> toDatagram(char channel, char type, T value)
+  dataGram floatToDatagram(char channel, char type, float value)
   {
-    std::array<uint8_t, 10> datagram;
-    datagram[0] = (uint8_t)'B';
-    datagram[1] = (uint8_t)'B';
-    datagram[2] = channel;
-    datagram[3] = type;
-    memcpy(&datagram[4], &value, 4);
-    datagram[8] = (uint8_t)'E';
-    datagram[9] = (uint8_t)'E';
+    dataGram datagram;
+    datagram.start1 = (uint8_t)'B';
+    datagram.start2 = (uint8_t)'B';
+    datagram.CH = channel;
+    datagram.DT = type;
+    datagram.data.dataFloat = value;
+    datagram.end1 = (uint8_t)'E';
+    datagram.end2 = (uint8_t)'E';
+    return datagram;
+  }
+  dataGram intToDatagram(char channel, char type, int32_t value)
+  {
+    dataGram datagram;
+    datagram.start1 = (uint8_t)'B';
+    datagram.start2 = (uint8_t)'B';
+    datagram.CH = channel;
+    datagram.DT = type;
+    datagram.data.dataInt = value;
+    datagram.end1 = (uint8_t)'E';
+    datagram.end2 = (uint8_t)'E';
     return datagram;
   }
 
@@ -40,9 +63,10 @@ private:
   int _baudRate;
   int _intChannels[128];
   float _floatChannels[128];
-  std::vector<uint8_t> _broken;
-  void _handleBuffer(uint8_t* newBuffer, int numBytes);
-  void _setChannelValue(char datatype, uint8_t channel, uint8_t* data);
+  char* _broken;
+  int _brokenBits;
+  void _handleBuffer(uint8_t *newBuffer, int numBytes);
+  void _setChannelValue(char datatype, uint8_t channel, uint8_t *data);
 };
 
 #endif
