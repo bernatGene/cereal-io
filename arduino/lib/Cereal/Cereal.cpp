@@ -24,7 +24,7 @@ void Cereal::readCereal()
   {
     return;
   }
-  while (Serial.available() > 0)
+  while (Serial.available() > 0 || buffer_i == 8)
   {
     char inByte;
     inByte = Serial.read();
