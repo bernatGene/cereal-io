@@ -35,7 +35,7 @@ void loop()
   cereal.sendFloat(0, x); // float an int channels don't overlap
   cereal.sendFloat(1, y);
   cereal.sendFloat(2, z);
-  cereal.passiveListen(100); // Use this instead of `delay()` to avoid blocking the.
+  cereal.passiveListen(100); // Use this instead of `delay()` to avoid blocking.
 }
 ```
 
