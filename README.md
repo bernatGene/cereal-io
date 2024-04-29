@@ -83,11 +83,15 @@ of you arduino project. (path in this repo: `/arudino/lib/Cereal`).
 Setting up the unity environment requires a tiny bit more work. Roughly:
 
 - Setting up .NET4 in project.
+  - Go to `Edit > Project Settings > Player > Other Settings > Configuration > Api Compatibility Level` and set it to `.NET Framework`.
+  ![image](https://github.com/bernatGene/cereal-io/assets/39168013/af866ff5-48b1-41ff-ae45-f2c0ca78fb67)
 - Copying `Cereal.cs` into your assets. 
 - Creating a Game Object to contain your unity inputs.
 - Having a widget that allows you to select from a list of open Serial Ports, and call
 `ConnectToPort`. 
-- Connecting game objects to functions that send or read the values you want. 
+- Connecting game objects to functions that send or read the values you want.
+
+Alternatively you can drag and drop the `Cereal_IO_V2.unitypackage` found in this repository under the `unity` folder.
 
 A full-feature working example can be found in:
 
