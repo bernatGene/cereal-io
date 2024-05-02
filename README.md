@@ -73,7 +73,7 @@ cereal.passiveListen(60); //stop writing for 60ms and only read
 int value = cereal.readInt(1); // 42
 float othervalue = cereal.readFloat(1); // 23.2
 ```
-It is important that you include `cereal.passiveListen(60)` or `cereal.ReadCereal()` in your arduino code before perfoming any read of values being sent to it by Unity. These functions are necessary for the bi-directional Serial communication to work as intended.
+It is important that you include `cereal.passiveListen(60)` or `cereal.readCereal()` in your arduino code before perfoming any read of values being sent to it by Unity. These functions are necessary for the bi-directional Serial communication to work as intended.
 
 ## Setting things up
 
