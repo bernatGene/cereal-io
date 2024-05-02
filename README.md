@@ -32,7 +32,7 @@ void loop()
   y += .002;
   z += .003;
 
-  cereal.sendFloat(0, x); // float an int channels don't overlap
+  cereal.sendFloat(0, x); // float and int channels don't overlap
   cereal.sendFloat(1, y);
   cereal.sendFloat(2, z);
   cereal.passiveListen(100); // Use this instead of `delay()` to avoid blocking.
@@ -91,7 +91,7 @@ Setting up the unity environment requires a tiny bit more work. Roughly:
 `ConnectToPort`. 
 - Connecting game objects to functions that send or read the values you want.
 
-Alternatively you can drag and drop the `Cereal_IO_V2.unitypackage` found in this repository under the `unity` folder.
+Alternatively you can drag and drop the `Cereal_IO_V3.unitypackage` found in this repository under the `unity` folder, on your assets folder and use the given template scene.
 
 A full-feature working example can be found in:
 
