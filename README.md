@@ -47,12 +47,21 @@ using System;
 using System.Linq;
 using System.IO.Ports; // Requires .NET 4 in Project Settings
 
-public void ConnectToPort() // this should be called from a uinity game object
+private Cereal cereal;
+
+void Start()
 {
-    string port = _ports[PortsDropdown.value];
+    cereal = new Cereal();
+    ConnectToPort();
+}
+
+public void ConnectToPort() // this should be called from a unity game object at void Start
+{
+    string port = "Write your PORT name here";
     cereal.InitCereal(port, 9600);
     StartCoroutine(cereal.ReadCereal());
 }
+
 // will contain values from arduino
 int count = cereal.ReadInt(0);
 float x = cereal.ReadFloat(0);
@@ -88,8 +97,6 @@ Setting up the unity environment requires a tiny bit more work. Roughly:
   ![image](https://github.com/bernatGene/cereal-io/assets/39168013/af866ff5-48b1-41ff-ae45-f2c0ca78fb67)
 - Copying `Cereal.cs` into your assets. 
 - Creating a Game Object to contain your unity inputs.
-- Having a widget that allows you to select from a list of open Serial Ports, and call
-`ConnectToPort`. 
 - Connecting game objects to functions that send or read the values you want.
 
 Alternatively you can drag and drop the `Cereal_IO_V3.unitypackage` found in this repository under the `unity` folder, on your assets folder and use the given template scene.
