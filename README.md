@@ -55,18 +55,21 @@ void Start()
     ConnectToPort();
 }
 
-public void ConnectToPort() // this should be called from a unity game object at void Start
+void Update()
+{
+    // will contain values from arduino
+    int count = cereal.ReadInt(0);
+    float x = cereal.ReadFloat(0);
+    float y = cereal.ReadFloat(1);
+    float z = cereal.ReadFloat(2);
+}
+
+public void ConnectToPort() // this must be called at void Start
 {
     string port = "Write your PORT name here";
     cereal.InitCereal(port, 9600);
     StartCoroutine(cereal.ReadCereal());
 }
-
-// will contain values from arduino
-int count = cereal.ReadInt(0);
-float x = cereal.ReadFloat(0);
-float y = cereal.ReadFloat(1);
-float z = cereal.ReadFloat(2);
 ```
 It also works in the opposite direction
 
