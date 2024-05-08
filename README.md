@@ -42,33 +42,35 @@ void loop()
 This can be read in unity like so:
 
 ```c#
-private Cereal cereal;
 using System;
 using System.Linq;
 using System.IO.Ports; // Requires .NET 4 in Project Settings
 
-private Cereal cereal;
+public class YourScriptName : Monobehavior {
 
-void Start()
-{
+  private Cereal cereal;
+
+  void Start()
+  {
     cereal = new Cereal();
     ConnectToPort();
-}
+  }
 
-void Update()
-{
+  void Update()
+  {
     // will contain values from arduino
     int count = cereal.ReadInt(0);
     float x = cereal.ReadFloat(0);
     float y = cereal.ReadFloat(1);
     float z = cereal.ReadFloat(2);
-}
+  }
 
-public void ConnectToPort() // this must be called at void Start
-{
+  public void ConnectToPort() // this must be called at void Start
+  {
     string port = "Write your PORT name here";
     cereal.InitCereal(port, 9600);
     StartCoroutine(cereal.ReadCereal());
+  }
 }
 ```
 It also works in the opposite direction
