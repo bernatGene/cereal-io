@@ -1,7 +1,7 @@
 # cereal-io
 Serial Communication between Arduino and Unity
 
-## *provisional documentation*
+## *documentation*
 
 This library allows for a "shared-memory-like" communication between Arduino and unity using Serial communication. 
 
@@ -111,9 +111,14 @@ A full-feature working example can be found in:
 - Arduino code: `/arduino/src/SendAndReadCereal.ino`
 - Unity code: `/unity/Assets/CeralTest.cs`
 
+## Serial Communication Port Selection
+
+We need to be able to tell Unity what Port the computer is using for communication with the Arduino. 
+While we can manually edit the port name on our `Cereal.cs` script, a much better way is to incorporate some sort of UI element that let's us pick the correct port.
+For this we have introduced a new wrapper code called `CerealManager.cs` and a full implementation of it, a prefab containing all the necessary UI elements can be found as a `package` on: `unity/CerealManagerPackage.unitypackage`.
+
+This wrapper contains it's own definitions for the `SendInt()`, `SendFloat()`, `ReadInt()` and `ReadFloat()` functions.
+It is highly recommended that you use this implementation of the Cereal code for your Unity builds, as it will allow you to pick the correct Port for Serial Communication through a simple UI element.
 
 *Disclaimer*: This library is currently not thoroughly tested. It has only been tested for
 the UNO R3 board.
-
-
-
