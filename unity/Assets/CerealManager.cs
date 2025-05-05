@@ -53,14 +53,16 @@ public class CerealManager : MonoBehaviour
         cereal.SendFloat(channel, value); // Send a float value to the specified channel.
     }
 
-    public void ReadInt(byte channel)
+    public int ReadInt(byte channel)
     {
         int value = cereal.ReadInt(channel); // Read an integer value from the specified channel.
         Debug.Log("Read Int: " + value); // Log the read value to the console.
+        return value;
     }
-    public void ReadFloat(byte channel)
+    public float ReadFloat(byte channel)
     {
         float value = cereal.ReadFloat(channel); // Read a float value from the specified channel.
         Debug.Log("Read Float: " + value); // Log the read value to the console.
+        return value;
     }
 }
