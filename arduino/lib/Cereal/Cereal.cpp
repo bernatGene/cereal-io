@@ -26,18 +26,8 @@ void Cereal::readCereal()
   }
   while (Serial.available() > 0 || buffer_i == 8)
   {
-    char inByte;
-    inByte = Serial.read();
-
-    if (inByte != 'B' && buffer_i == 0) // wait for the start of a packet
-    {
-      continue;
-    }
-    if (buffer_i < 8) // store the packet into buffer
-    {
-      buffer[buffer_i++] = inByte;
-    }
-    else // buffer is full, let's read
+    // process full buffer before reading the next byte
+    if (buffer_i == 8)
     {
       bool start = (buffer[0] == 'B');
       bool end = (buffer[7] == '\n');
@@ -70,7 +60,16 @@ void Cereal::readCereal()
         }
       }
       buffer_i = 0; // reset the buffer.
+      continue;
     }
+
+    char inByte = Serial.read();
+
+    if (inByte != 'B' && buffer_i == 0) // wait for the start of a packet
+    {
+      continue;
+    }
+    buffer[buffer_i++] = inByte;
   }
 }
 

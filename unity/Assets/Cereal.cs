@@ -11,6 +11,10 @@ public class Cereal
     private static List<byte> _broken = new List<byte>();
     private float[] _floatChannels = new float[128];
     private int[] _intChannels = new int[128];
+    private int[] _lastSentInt = new int[128];
+    private float[] _lastSentFloat = new float[128];
+    private bool[] _intSentOnce = new bool[128];
+    private bool[] _floatSentOnce = new bool[128];
 
     private void SetChannelValue(byte datatype, uint channel, byte[] data)
     {
@@ -129,14 +133,24 @@ public class Cereal
 
     public void SendInt(byte channel, int value)
     {
+        if (_intSentOnce[channel] && _lastSentInt[channel] == value)
+            return;
+        _lastSentInt[channel] = value;
+        _intSentOnce[channel] = true;
         byte[] datagram = ToDatagram(channel, (byte)'I', value);
         Debug.Log(FormatBytes(datagram));
         _serial.Write(datagram, 0, 8);
+        _serial.BaseStream.Flush();
     }
     public void SendFloat(byte channel, float value)
     {
+        if (_floatSentOnce[channel] && _lastSentFloat[channel] == value)
+            return;
+        _lastSentFloat[channel] = value;
+        _floatSentOnce[channel] = true;
         byte[] datagram = ToDatagram(channel, (byte)'F', value);
         _serial.Write(datagram, 0, 8);
+        _serial.BaseStream.Flush();
     }
 
     public void InitCereal(string port, int baudRate = 9600)
