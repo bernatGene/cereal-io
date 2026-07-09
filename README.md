@@ -121,4 +121,4 @@ This wrapper contains it's own definitions for the `SendInt()`, `SendFloat()`, `
 It is highly recommended that you use this implementation of the Cereal code for your Unity builds, as it will allow you to pick the correct Port for Serial Communication through a simple UI element.
 
 *Disclaimer*: This library is currently not thoroughly tested. It has only been tested for
-the UNO R3 board.
+the UNO R3 board, UNO R4 Minima, UNO R4 WiFi, Leonardo, Nano, and some ESP32 based boards.
